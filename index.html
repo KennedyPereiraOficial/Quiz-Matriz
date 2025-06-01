@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Matemático - Matrizes</title>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            background-color: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #ccc;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+        .matrix {
+            font-family: monospace;
+            white-space: pre;
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Quiz Matemático - Matrizes</h1>
+
+<div id="quiz">
+
+    <div id="q1" class="question">
+        <h2>1) Qual o valor do elemento na posição (1,2) da matriz abaixo?</h2>
+        <div class="matrix">
+[ 1  2  3 ]<br>
+[ 4  5  6 ]<br>
+[ 7  8  9 ]
+        </div>
+        <input type="text" id="resposta1">
+        <br><button onclick="verificar1()">Responder</button>
+        <p id="feedback1"></p>
+    </div>
+
+    <div id="q2" class="question hidden">
+        <h2>2) Qual a dimensão da matriz acima?</h2>
+        <input type="radio" id="a" name="dimensao" value="a">
+        <label for="a">a) 3x3</label><br>
+        <input type="radio" id="b" name="dimensao" value="b">
+        <label for="b">b) 2x3</label><br>
+        <input type="radio" id="c" name="dimensao" value="c">
+        <label for="c">c) 3x2</label><br>
+        <button onclick="verificar2()">Responder</button>
+        <p id="feedback2"></p>
+    </div>
+
+    <div id="q3" class="question hidden">
+        <h2>3) Qual o determinante da matriz abaixo?</h2>
+        <div class="matrix">
+[ 1  2 ]<br>
+[ 3  4 ]
+        </div>
+        <input type="text" id="resposta3">
+        <br><button onclick="verificar3()">Responder</button>
+        <p id="feedback3"></p>
+    </div>
+
+    <div id="resultado" class="question hidden">
+        <h2>Resultado Final</h2>
+        <p id="pontuacao"></p>
+        <h3>Deixe sua avaliação do quiz:</h3>
+        <label><input type="radio" name="avaliacao" value="1"> 1 - Muito ruim</label><br>
+        <label><input type="radio" name="avaliacao" value="2"> 2 - Ruim</label><br>
+        <label><input type="radio" name="avaliacao" value="3"> 3 - Mediano</label><br>
+        <label><input type="radio" name="avaliacao" value="4"> 4 - Bom</label><br>
+        <label><input type="radio" name="avaliacao" value="5"> 5 - Excelente</label><br><br>
+        <button onclick="finalizar()">Enviar Avaliação</button>
+        <p id="feedbackFinal"></p>
+    </div>
+
+</div>
+
+<script>
+    let score = 0;
+
+    function verificar1() {
+        const resposta = document.getElementById('resposta1').value.trim();
+        const feedback = document.getElementById('feedback1');
+        if (resposta === "2") {
+            feedback.textContent = "✅ Correto!";
+            score++;
+            document.getElementById('q1').classList.add('hidden');
+            document.getElementById('q2').classList.remove('hidden');
+        } else {
+            feedback.textContent = "❌ Errado! Tente novamente.";
+        }
+    }
+
+    function verificar2() {
+        const resposta = document.querySelector('input[name="dimensao"]:checked');
+        const feedback = document.getElementById('feedback2');
+        if (!resposta) {
+            feedback.textContent = "⚠️ Selecione uma opção.";
+            return;
+        }
+        if (resposta.value === "a") {
+            feedback.textContent = "✅ Correto!";
+            score++;
+            document.getElementById('q2').classList.add('hidden');
+            document.getElementById('q3').classList.remove('hidden');
+        } else {
+            feedback.textContent = "❌ Errado! Tente novamente.";
+        }
+    }
+
+    function verificar3() {
+        const resposta = document.getElementById('resposta3').value.trim();
+        const feedback = document.getElementById('feedback3');
+        if (resposta === "-2") {
+            feedback.textContent = "✅ Correto!";
+            score++;
+            document.getElementById('q3').classList.add('hidden');
+            mostrarResultado();
+        } else {
+            feedback.textContent = "❌ Errado! Tente novamente.";
+        }
+    }
+
+    function mostrarResultado() {
+        document.getElementById('resultado').classList.remove('hidden');
+        const texto = `🎯 Você acertou ${score} de 3 perguntas.`;
+        document.getElementById('pontuacao').textContent = texto;
+    }
+
+    function finalizar() {
+        const avaliacao = document.querySelector('input[name="avaliacao"]:checked');
+        const feedback = document.getElementById('feedbackFinal');
+
+        if (!avaliacao) {
+            feedback.textContent = "⚠️ Por favor, selecione uma nota de 1 a 5.";
+            return;
+        }
+
+        const nota = parseInt(avaliacao.value);
+        let mensagem = "";
+
+        if (nota <= 2) {
+            mensagem = "😟 Sentimos que não tenha gostado. Vamos trabalhar para melhorar!";
+        } else if (nota === 3) {
+            mensagem = "🙂 Agradecemos! Seu feedback nos ajuda a melhorar.";
+        } else {
+            mensagem = "🥳 Que bom que você gostou! Ficamos muito felizes!";
+        }
+
+        feedback.textContent = mensagem + " Obrigado por participar do quiz!";
+    }
+</script>
+
+</body>
+</html>
+ 
